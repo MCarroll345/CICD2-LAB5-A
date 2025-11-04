@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import selectinload
-from app.database import engine
+from app.database import engine, SessionLocal
 from app.models import Base, UserDB, CourseDB, ProjectDB
 from app.schemas import (
     UserCreate, UserRead, UserPATCH,
@@ -22,6 +22,8 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+
+Base.metadata.create_all(bind=engine)
 
 # CORS (add this block)
 app.add_middleware(
